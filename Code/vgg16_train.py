@@ -11,6 +11,15 @@ import cv2
 import glob
 from torch.autograd import Variable
 import torchvision.models as models
+import sys
+
+
+train_path = ""
+val_path = ""
+args = sys.argv
+if(len(args) > 2):
+    train_path = args[1]
+    val_path = args[2]
 
 train_transforms = transforms.Compose([transforms.RandomRotation(30),
                                        transforms.RandomResizedCrop(224),
@@ -25,8 +34,8 @@ test_transforms = transforms.Compose([transforms.Resize(255),
                                       transforms.Normalize([0.485, 0.456, 0.406],
                                                            [0.229, 0.224, 0.225])])
 
-train_data = datasets.ImageFolder("../data/train_images/", transform=train_transforms)
-val_data = datasets.ImageFolder("../data/val_images/", transform=train_transforms)
+train_data = datasets.ImageFolder(train_path, transform=train_transforms)
+val_data = datasets.ImageFolder(val_path, transform=train_transforms)
 print(len(train_data))
 print(len(val_data))
 
@@ -38,7 +47,7 @@ val_loader = torch.utils.data.DataLoader(val_data, batch_size=64, shuffle=True, 
 class VGG16(nn.Module):
     
     # init method
-    def __init__(self, num_classes = 2):
+    def __init__(self, num_classes = 1000):
         super(VGG16, self).__init__()
         
         self.features = nn.Sequential(
