@@ -39,7 +39,7 @@ python Code/train.py <dataset_path>
 For example, the steps to run the train script were:<br>
 ```
 python Code/train.py /home/arpitdec5/Desktop/PennFudanPed
-```<br>
+```
 To run the test.py file follow the commands below:<br><br>
 ```
 python Code/test.py <dataset_path> <model_path>
