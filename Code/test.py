@@ -16,8 +16,10 @@ import sys
 # set data path
 args = sys.argv
 train_data_path = ""
-if(len(args) > 1):
+model_path = ""
+if(len(args) > 2):
     train_data_path = str(args[1])
+    model_path = str(args[2])
 
 # required functions
 def get_model_instance_segmentation(num_classes):
@@ -131,6 +133,7 @@ num_classes = 2
 
 # get the model using our helper function
 model = get_model_instance_segmentation(num_classes)
+model.load_state_dict(torch.load(model_path))
 
 # move model to the right device
 model.to(device)
@@ -139,17 +142,13 @@ model.to(device)
 params = [p for p in model.parameters() if p.requires_grad]
 optimizer = torch.optim.SGD(params, lr = 0.005, momentum = 0.9, weight_decay = 0.0005)
     
-# and a learning rate scheduler
-lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 3, gamma = 0.1)
+# pick one image from the test set
+img, _ = dataset_test[0]
 
-# let's train it for 10 epochs
-num_epochs = 10
+# put the model in evaluation mode
+model.eval()
+with torch.no_grad():
+    prediction = model([img.to(device)])
 
-# train model
-for epoch in range(num_epochs):
-  train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq = 10)
-  lr_scheduler.step()
-  evaluate(model, data_loader_test, device=device)
-
-# save model
-torch.save(model.state_dict(), 'model.pth')
+Image.fromarray(img.mul(255).permute(1, 2, 0).byte().numpy())
+Image.fromarray(prediction[0]['masks'][0, 0].mul(255).byte().cpu().numpy())
