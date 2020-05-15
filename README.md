@@ -29,5 +29,5 @@ The training was done using the file "Code/train.py". The model was pre-trained 
 
 ### Credits
 The following links helped in completing the project:
-1. https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html
+1. https://github.com/jwyang/faster-rcnn.pytorch
 2. https://github.com/multimodallearning/pytorch-mask-rcnn
