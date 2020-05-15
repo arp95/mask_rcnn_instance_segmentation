@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torchvision import transforms, models, datasets
 import matplotlib.pyplot as plt
-%matplotlib inline
+
 
 # Created the Class for the custom dataset
 class CustomDataset(torch.utils.data.Dataset):
